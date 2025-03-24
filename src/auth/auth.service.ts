@@ -1,35 +1,40 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { OAuth2Client } from 'google-auth-library';
+import { PrismaService } from '../prisma/prisma.service';
+import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  private googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
 
-  constructor(private readonly jwtService: JwtService) {}
-
-  // Verify the Google token received from the client
-  async verifyGoogleToken(idToken: string) {
+  async login(loginDto: LoginDto) {
+    const { user_id,email,name,picture } = loginDto;
+    console.log("user_id:", user_id);
     try {
-      const ticket = await this.googleClient.verifyIdToken({
-        idToken,
-        audience: process.env.GOOGLE_CLIENT_ID,
-      });
-      const payload = ticket.getPayload();
+      console.log("inside");
+      let user = await this.prisma.users.findUnique({ where: { user_id } });
+      console.log(user);
+      if (!user) {
+        console.log("inside database");
+        user = await this.prisma.users.create({
+          data: { email, displayName: name, photoUrl: picture, user_id: user_id},
+        });
+        console.log('User created:', user);
+      }
 
-      if (!payload) throw new UnauthorizedException('Invalid token');
+      const payload = {user_id: user_id,email,picture,name};
+      const accessToken = this.jwtService.sign(payload);
 
-      // Extracting user info
-      const { sub, email, name, picture } = payload;
-      return { userId: sub, email, name, picture };
+      return { accessToken };
     } catch (error) {
-      throw new UnauthorizedException('Token validation failed');
+      console.error('Token verification failed:', error.code, error.message);
+      if (error.code === 'auth/id-token-expired') {
+        throw new Error('ID Token has expired');
+      }
+      throw new UnauthorizedException('Invalid Firebase ID Token');
     }
-  }
-
-  // Generate JWT token for the user
-  async generateJwtToken(userDetails: { email: string; name: string }) {
-    const payload = { email: userDetails.email, name: userDetails.name };
-    return this.jwtService.sign(payload);
   }
 }

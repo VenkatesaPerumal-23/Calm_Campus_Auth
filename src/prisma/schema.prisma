@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id                                               Int             @id @default(autoincrement())
+  email                                            String          @db.VarChar(255)
+  displayName                                      String?         @db.VarChar(100)
+  photoUrl                                         String?         @db.Text
+  country                                          String?         @db.VarChar(100)
+  createdAt                                        DateTime?       @default(now()) @db.DateTime(0)
+  user_id                                          String          @unique(map: "unique_user_id") @db.VarChar(255)
+  updatedAt                                        DateTime?       @default(now()) @db.DateTime(0)
+  friend_friend_user_idTousers                     friend[]        @relation("friend_user_idTousers")
+  friend_friend_friend_idTousers                   friend[]        @relation("friend_friend_idTousers")
+  friendrequest_friendrequest_sender_idTousers     friendrequest[] @relation("friendrequest_sender_idTousers")
+  friendrequest_friendrequest_receiver_idTousers   friendrequest[] @relation("friendrequest_receiver_idTousers")
+  professional_professional_user_idTousers         professional[]  @relation("professional_user_idTousers")
+  professional_professional_professional_idTousers professional[]  @relation("professional_professional_idTousers")
+  progress                                         progress[]
+  streaks                                          streaks?
+}
+
+model progress {
+  id             Int       @id @default(autoincrement())
+  userId         Int
+  newConnections Int?      @default(0)
+  articlesRead   Int?      @default(0)
+  messagesSent   Int?      @default(0)
+  hoursSlept     Float?    @db.Float
+  booksRead      Int?
+  lastUpdated    DateTime? @default(now()) @db.Timestamp(0)
+  createdAt      DateTime? @default(now()) @db.DateTime(0)
+  users          users     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "progress_ibfk_1")
+
+  @@index([userId], map: "userId")
+}
+
+model article {
+  id              Int       @id @default(autoincrement())
+  title           String    @db.VarChar(255)
+  category        String    @db.VarChar(100)
+  author          String    @db.VarChar(255)
+  sourceUrl       String?   @db.Text
+  createdAt       DateTime? @default(now()) @db.Timestamp(0)
+  likes           Int?      @default(0)
+  dislikes        Int?      @default(0)
+  updatedAt       DateTime? @default(now()) @db.DateTime(0)
+  sub_description String?   @db.Text
+  image_url       String?   @db.VarChar(255)
+}
+
+model event {
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(255)
+  description String    @db.Text
+  date        DateTime  @db.Date
+  time        String    @db.VarChar(50)
+  location    String    @db.VarChar(255)
+  updatedAt   DateTime? @default(now()) @db.DateTime(0)
+  image_url   String?   @db.Text
+  about       String?   @db.Text
+  rsvp        rsvp[]
+}
+
+model rsvp {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  userEmail String    @db.VarChar(255)
+  eventId   Int
+  createdAt DateTime? @default(now()) @db.DateTime(0)
+  updatedAt DateTime? @default(now()) @db.DateTime(0)
+  event     event     @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "rsvp_ibfk_1")
+
+  @@index([eventId], map: "eventId")
+}
+
+model streaks {
+  id               Int       @id @default(autoincrement())
+  user_id          Int       @unique(map: "unique_user_id")
+  current_streak   Int?      @default(0)
+  longest_streak   Int?      @default(0)
+  last_active_date DateTime? @db.Date
+  created_at       DateTime? @default(now()) @db.Timestamp(0)
+  updated_at       DateTime? @default(now()) @db.Timestamp(0)
+  users            users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "streaks_ibfk_1")
+}
+
+model friend {
+  id                            Int       @id @default(autoincrement())
+  user_id                       Int
+  friend_id                     Int
+  created_at                    DateTime? @default(now()) @db.Timestamp(0)
+  users_friend_user_idTousers   users     @relation("friend_user_idTousers", fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "friend_ibfk_1")
+  users_friend_friend_idTousers users     @relation("friend_friend_idTousers", fields: [friend_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "friend_ibfk_2")
+
+  @@index([friend_id], map: "friend_id")
+  @@index([user_id], map: "user_id")
+}
+
+model friendrequest {
+  id                                     Int                   @id @default(autoincrement())
+  sender_id                              Int
+  receiver_id                            Int
+  status                                 friendrequest_status? @default(pending)
+  created_at                             DateTime?             @default(now()) @db.Timestamp(0)
+  users_friendrequest_sender_idTousers   users                 @relation("friendrequest_sender_idTousers", fields: [sender_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "friendrequest_ibfk_1")
+  users_friendrequest_receiver_idTousers users                 @relation("friendrequest_receiver_idTousers", fields: [receiver_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "friendrequest_ibfk_2")
+
+  @@index([receiver_id], map: "receiver_id")
+  @@index([sender_id], map: "sender_id")
+}
+
+model professional {
+  id                                        Int       @id @default(autoincrement())
+  user_id                                   Int
+  professional_id                           Int
+  created_at                                DateTime? @default(now()) @db.Timestamp(0)
+  users_professional_user_idTousers         users     @relation("professional_user_idTousers", fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "professional_ibfk_1")
+  users_professional_professional_idTousers users     @relation("professional_professional_idTousers", fields: [professional_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "professional_ibfk_2")
+
+  @@index([professional_id], map: "professional_id")
+  @@index([user_id], map: "user_id")
+}
+
+enum friendrequest_status {
+  pending
+  accepted
+  rejected
+}

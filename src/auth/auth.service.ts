@@ -1,35 +1,53 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { OAuth2Client } from 'google-auth-library';
+import { PrismaService } from '../prisma/prisma.service';
+import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  private googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
 
-  constructor(private readonly jwtService: JwtService) {}
+  async login(loginDto: LoginDto) {
+    const { user_id, email, name, picture, fcmToken } = loginDto;
+    console.log("user_id:", user_id);
 
-  // Verify the Google token received from the client
-  async verifyGoogleToken(idToken: string) {
     try {
-      const ticket = await this.googleClient.verifyIdToken({
-        idToken,
-        audience: process.env.GOOGLE_CLIENT_ID,
-      });
-      const payload = ticket.getPayload();
+      let user = await this.prisma.users.findUnique({ where: { user_id } });
 
-      if (!payload) throw new UnauthorizedException('Invalid token');
+      if (!user) {
+        console.log("User not found, creating new user.");
+        user = await this.prisma.users.create({
+          data: {
+            email,
+            displayName: name,
+            photoUrl: picture,
+            user_id,
+            fcmToken
+          },
+        });
+        console.log('User created:', user);
+      } else {
+        console.log("User found, updating FCM token.");
+        // update FCM token if changed or present
+        await this.prisma.users.update({
+          where: { user_id },
+          data: { fcmToken },
+        });
+      }
 
-      // Extracting user info
-      const { sub, email, name, picture } = payload;
-      return { userId: sub, email, name, picture };
+      const payload = { user_id, email, picture, name };
+      const accessToken = this.jwtService.sign(payload);
+
+      return { accessToken };
     } catch (error) {
-      throw new UnauthorizedException('Token validation failed');
+      console.error('Token verification failed:', error.code, error.message);
+      if (error.code === 'auth/id-token-expired') {
+        throw new Error('ID Token has expired');
+      }
+      throw new UnauthorizedException('Invalid Firebase ID Token');
     }
-  }
-
-  // Generate JWT token for the user
-  async generateJwtToken(userDetails: { email: string; name: string }) {
-    const payload = { email: userDetails.email, name: userDetails.name };
-    return this.jwtService.sign(payload);
   }
 }

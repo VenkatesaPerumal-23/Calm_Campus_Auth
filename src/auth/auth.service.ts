@@ -11,21 +11,34 @@ export class AuthService {
   ) {}
 
   async login(loginDto: LoginDto) {
-    const { user_id,email,name,picture } = loginDto;
+    const { user_id, email, name, picture, fcmToken } = loginDto;
     console.log("user_id:", user_id);
+
     try {
-      console.log("inside");
       let user = await this.prisma.users.findUnique({ where: { user_id } });
-      console.log(user);
+
       if (!user) {
-        console.log("inside database");
+        console.log("User not found, creating new user.");
         user = await this.prisma.users.create({
-          data: { email, displayName: name, photoUrl: picture, user_id: user_id},
+          data: {
+            email,
+            displayName: name,
+            photoUrl: picture,
+            user_id,
+            fcmToken, 
+          },
         });
         console.log('User created:', user);
+      } else {
+        console.log("User found, updating FCM token.");
+        // update FCM token if changed or present
+        await this.prisma.users.update({
+          where: { user_id },
+          data: { fcmToken },
+        });
       }
 
-      const payload = {user_id: user_id,email,picture,name};
+      const payload = { user_id, email, picture, name };
       const accessToken = this.jwtService.sign(payload);
 
       return { accessToken };

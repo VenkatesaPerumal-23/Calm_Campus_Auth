@@ -15,5 +15,10 @@ export class FriendRequestsController {
   @Patch('accept/:requestId')
   async acceptFriendRequest(@Param('requestId', ParseIntPipe) requestId: number) {
     return this.friendRequestsService.acceptFriendRequest(requestId);
+  } 
+
+  @Patch('reject/:requestId')
+  async rejectFriendRequest(@Param('requestId', ParseIntPipe) requestId: number) {
+  return this.friendRequestsService.rejectFriendRequest(requestId);
   }
 }

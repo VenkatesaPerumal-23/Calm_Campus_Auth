@@ -7,4 +7,5 @@ export class LoginDto {
   email:string;
   name:string;
   picture:string;
+  fcmToken: string;
 }

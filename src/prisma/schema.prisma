@@ -13,6 +13,7 @@ model users {
   displayName                                      String?         @db.VarChar(100)
   photoUrl                                         String?         @db.Text
   country                                          String?         @db.VarChar(100)
+  fcmToken                                         String?         @db.VarChar(512)
   createdAt                                        DateTime?       @default(now()) @db.DateTime(0)
   user_id                                          String          @unique(map: "unique_user_id") @db.VarChar(255)
   updatedAt                                        DateTime?       @default(now()) @db.DateTime(0)

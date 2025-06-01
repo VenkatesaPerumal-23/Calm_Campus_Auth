@@ -1,9 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service'; 
+import { ProgressService } from '../progress/progress.service';
+
 
 @Injectable()
 export class ArticlesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService,
+    private progressService: ProgressService
+  ) {}
 
   async getAllArticles() {
     const articles = await this.prisma.article.findMany();
@@ -59,5 +63,35 @@ export class ArticlesService {
     } else {
       throw new BadRequestException('Invalid action. Use "like" or "dislike".');
     }
+  } 
+async markArticleAsRead(articleId: number, userId: string) {
+  const article = await this.prisma.article.findUnique({ where: { id: articleId } });
+
+  if (!article) {
+    throw new Error('Article not found');
   }
+
+  const existingRead = await this.prisma.userarticleread.findFirst({
+    where: {
+      article_id: articleId,
+      user_id: userId,
+    },
+  });
+
+  if (!existingRead) {
+    await this.prisma.userarticleread.create({
+      data: {
+        article_id: articleId,
+        user_id: userId,
+      },
+    });
+
+    await this.progressService.updateProgress(userId, { articlesRead: 1 });
+
+    return { message: 'Article marked as read' };
+  }
+
+  return { message: 'Article already marked as read' };
+}
+
 }

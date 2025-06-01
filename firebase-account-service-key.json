@@ -1,14 +1,13 @@
 {
-    "type": "service_account",
-    "project_id": "calmcampus-c7f77",
-    "private_key_id": "102e3c9e2839f9f45f38e575cb234b576c00f0bd",
-    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDLEmPWWHV8JxRH\n+lUvq/7gJTlDdewQpk4wo1drd21yB17PXPom6r/u+W/XDKnMn9KqFiG2VeeMkm8P\nxZgzMC4taSBVGIk1NIovHtGVwIHSP+gYq+vC1S1EUwN2g89qml4e74BeJoI9S3jx\ngNP9kw5dUjAttlMFUuE9t8nz8bE8YJQkDwv5OrfV5y8bGspGkgGvJosg5rAyvcqR\nBwxKntYG6p1d9oE1Y++62pXuvTuZKns2ClNW3EiOnDDZUQvGAALaaJubb5labPbs\n0Vq0a12NsKRobmHtDCqTFk7wxMWbleCvYBk0rNr42eyPBTu33h3OfVismVpVWAJF\nczOCqRaXAgMBAAECggEAOFvLuobFYGYGIm3O65KcA4BBMsBM+lf1dlk231v/U3jJ\nLtq6kEdxajTu/auFioVGta67v3t67lALo8Bum7JA9phpAUT0e4Av46D1gM6zGPNk\nikhYf7OjQwWY/fDaBVd/TK2inj6owbMrBzd+Xi9MesjfFyi1RNJ6MaNK2LmYu00B\n5BCmEV6FjZ9+pdmzBXc8TkYAeg2Fk710oKsPycQpOVKqfe1WvYa2kGJ3TZqUypbt\nnKeXaYZg3kmC1kzpdNxMcxMMawVGWHxkj0wiujea4gaKsd6V/A0HncmQym0xfd+c\nBsnekpMGXuZEIx0QrSsXpGDKgHF0Y6fyC3BCfuRyLQKBgQDqmE3mdUWAzZru+AWy\npvFD3/8MJzHhG0x4+Fd4s14y+nA69VFLKUE/FpygAdQUM3r/vaBhFHuCkr/0g6aO\ny/xNI4Z+uSO2aqO+1xUl0M1wbJ3HVcQj/983XkD0AjCmAUVbvjZJ2S82OnBx9a4b\nYcKCLk0oNaK8JFknD/SYChfuUwKBgQDdmcPyEI6eG3z7Fo7VlQajrdzsjeEJimfH\nIjG6IVAs99woZec0pE5ggx+gcrGRHF+nci0D9O1cfZxcxAQiWh0jf/TN5vA7qvFT\nHOkcqx2pNZMho8IqBATSAaXSyxUFmT5QnsyEVt91Esu05D5ki/YdgGpOVAQjoFDP\nqYXtWWDGLQKBgQCdu/Q87ULjPNtcrBUgrxDvo0+Yu03VXoaHm+ssc+X1fuAxNDsJ\nv15obeq3xyLyxj6Ab97DB4OYItXAMTivMMaekzFeSVuSzpb0vScx+vf3DID1w1wT\nHHrYfp5LsqFFLPuWmQlllAsjeh2a8iazsIKZB0rHq3CU8hejpR2/kKHQkwKBgQDb\nKahRT269kBIbgkPhmHHoj5tfmTJnbSsWFwt3OltBHiHvElmIBrg9W3F8DfLvwVAZ\nGyLKNwJJ5zEtze8IynbnFTXYLf6KBJaHzKAAanv7TbEmI/9z7mWWDWsi/xbbYqPu\nuB8tA34dG2m8jb/nUUUoCEkbDpzJX1SNDOwXwb2kQQKBgQDT/IMGB033pnoWgR1B\n5sCnXtNS4RaO7h/NKLcFyjc7BiWxrGje5U+ZXcr4R0Ngr7duHJYVPMrHX6FcRMR0\n30O4WvWGxmKDmwl7wMuv0XXrDoJ4CeYFVffmGoRb3Kly7wjpudUl9NotzZixQSAr\ndanR6FZFvcU1i+zC+8iEqp/tqw==\n-----END PRIVATE KEY-----\n",
-    "client_email": "firebase-adminsdk-chcfl@calmcampus-c7f77.iam.gserviceaccount.com",
-    "client_id": "100403367194192267772",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-chcfl%40calmcampus-c7f77.iam.gserviceaccount.com",
-    "universe_domain": "googleapis.com"
-  }
-  
+  "type": "service_account",
+  "project_id": "calmcampus-c7f77",
+  "private_key_id": "24e63ad810101945f3dbc753ab5ea5c89c284c23",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDiUX4fbMzq7xPg\nPyPDxARKztaRkPbeEmpBcW08wY9+lGrbsd6ouDkVaHbbb30SSrzzPCpvr2ut77s3\nxhSmVUsMkLYls19S1g3R1B+jPlF92fOn2Rq8RZiLkzvxSICQEoiDnLblNF1GXUgX\n4h6GqLCus3OD3FCBUEfDg4CkgPEMgNjCY2f9WPtMigiHFcozDEM+ZxnJ4zuEdOms\nh4tQiiC8XzH38wii8dHa+l4CtlcKFJAsmMvxGuL+jazj0wdj86B5D9N4G9oCu8wk\nt4WThcf4SpV3qbgvf5omCh5klcl6z4bKskBoRE2BxsHto6pXPVmppNnDt7hlwjob\nnSe1F/vxAgMBAAECggEAI9M0Qfjg5o7qLbULo3QWcoRpE8mHl+IAtD5RGpfQmqrC\nJZJzmsVFXVMC1Dvtkk/cDCwp0txzu6i3Zp3yQTLpj+IiazezLwjXpC+jbchcxwK8\nHrBFGqjGUSXWjHG7ztKYOIPoscHxwpnb4n1L9BNPmz/92Pwu5DbB6BGbc1mT5An/\nHZfHm7lp6rfJPBFhqVP3Wzf3m+TX8rZ6Io68HjY3zmUYBjMOkUfKYR7pwODo7itl\nQri+oTQWBSUqf2ZsdAtG3APtCvyfnmD1E9gcQ2R5ye+dKtPlHRCNFRvWJFRBGnxV\npdMLSgAyWdakgYv9dqHLsAI9DzDetw8Q/7sqUhxTnwKBgQD4Ow8rAvIoXB2t5/Dr\nZWj8uA+1Zr4Kde0tmc6f41p7tLeqkchmXZLNLAgWa/6zjfxg9Xpc4wCALmEz2yWB\nG/8zforXZ8dTd6Vqdndl2gjqxaLhmyIVDlYNOYQ4C1+DXc44f0e3FnqjTDmS6geW\nFEZzE5uMapkvrvbYHieziyzqlwKBgQDpZtx6MEQlST3xQ5lRasvbGTeb1Luz5S6i\nkaVc9xmTNNkdVNujIWVkrYhZkRU5vCfC4bzIm6jeJDrxL+hP5xbKVNyq67jqecAM\nEu08ha1h1UXPzylpKCM71iW8n9XKKzMoXNQ8dXAMBLmIDzD9hesRj6z6DcEbOKPs\nX6jjDMFGtwKBgFFmdJPjNGu9wVHM9HkM2T++UBBpb7pYb317qYFO+dYFLhF2GuRO\nnRxA6yoHIg/ZaMCW3xhkrD5cdy2dGJBdEPPe9EKs2nVpj8n4rTCuLixmwQIAcE29\nVMSjbtM+D4UxlrV6L5c/fNnd3idqLTCu12dXL7P9JNy5IGNAiD5dTk5jAoGBALfS\nAizdnJ39DCLayYJc6Qa62pgJOHebNVpl+OW52tOcGK7IKV9WKwPaw/s+j4f0DyCm\nJsecCKhDwoQ35fAgIUvjABRBKFbK4pzfvyYeZgoaLSxYjNW7/dvfccMX4wmhcl4E\nlkazezaL9g8ZX80bzqH7FRGvCXpF5pyAToPbhNELAoGBALxwi+YZzwKn/gRmKOff\nLTs7x19YH4BsadzvpPkHuXmyEuiNjTOgXQE18npgnj9hN91CpGI1R8ov36jOaEoO\nxmaseb1KkurVPPmZbRdCWan8O68/lfZLxNFaL7cdlR+Zjn+z51U+SCwR2gG+eEM0\n+pWRG4rR2pR83pVSptnpAonw\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-chcfl@calmcampus-c7f77.iam.gserviceaccount.com",
+  "client_id": "100403367194192267772",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-chcfl%40calmcampus-c7f77.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

@@ -1,15 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseGuards } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateCountryDto } from './dto/update-country';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Injectable()
+@UseGuards(JwtAuthGuard)
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(filters: { displayName?: string}) {
     const { displayName} = filters;
 
-    // If any filter is applied, return only `displayName`
+    // If a filter is applied, return only `displayName`
     if (displayName) {
       return this.prisma.users.findMany({
         where: {

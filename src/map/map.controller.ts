@@ -1,21 +1,29 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards, Req } from '@nestjs/common';
 import { MapsService } from './map.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Request } from 'express';
 
 @Controller('maps')
 @UseGuards(JwtAuthGuard)
 export class MapsController {
   constructor(private readonly mapsService: MapsService) {}
 
-  @Get('user-density')
-  async getUserDensity() {
-    return this.mapsService.getUserDensity();
+  // 1. Get all users
+  @Get('users')
+  getAllUsers() {
+    return this.mapsService.getAllUsers();
   }
 
-  @Get('country/:countryCode')
-  async getCountryDetails(@Param('countryCode') countryCode: string) {
-    return this.mapsService.getCountryDetails(countryCode);
+  // 2. Get all users from a specific country
+  @Get('users/country/:country')
+  getUsersByCountry(@Param('country') country: string) {
+    return this.mapsService.getUsersByCountry(country);
   }
 
-  //we can also get user's friends from particular country --- API
+  // 3. Get current user's friends from a specific country
+  @Get('friends/country/:country')
+  getFriendsFromCountry(@Param('country') country: string, @Req() req: Request) {
+    const userId = req.user['userId']; // userId from JWT
+    return this.mapsService.getFriendsFromCountry(userId, country);
+  }
 }

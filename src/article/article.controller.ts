@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Param, UseGuards, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, Get, Post, Param, UseGuards,Req, Query } from '@nestjs/common';
+import { Request } from 'express';
 import { ArticlesService } from './article.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
@@ -20,5 +21,11 @@ export class ArticlesController {
   @Post(':id/react')
   async reactToArticle(@Param('id') id: string, @Query('action') action: string) {
     return this.articlesService.reactToArticle(Number(id), action);
+  } 
+  @Post(':id/mark-as-read')
+  async markArticleAsRead(@Param('id') id:string, @Req() req:Request){
+    const userId = String(req.user?.user_id)
+    return this.articlesService.markArticleAsRead(Number(id), userId);
   }
 }
+    

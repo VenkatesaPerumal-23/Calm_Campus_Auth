@@ -1,22 +1,93 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class MapsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async getUserDensity() {
-    return this.prisma.users.groupBy({
-      by: ['country'],
-      _count: { country: true },
+  // 1. Get all users
+  async getAllUsers() {
+    return this.prisma.users.findMany({
+      select: {
+        user_id: true,
+        displayName: true,
+        country: true,
+        photoUrl: true,
+      },
     });
   }
 
-  async getCountryDetails(countryCode: string) {
-    const totalUsers = await this.prisma.users.count({
-      where: { country: countryCode },
+  // 2. Get all users from a specific country
+  async getUsersByCountry(country: string) {
+    const whereClause: any = {};
+
+    if (country) {
+      whereClause.country = {
+        contains: country,
+      };
+    }
+
+    return this.prisma.users.findMany({
+      where: whereClause,
+      select: {
+        user_id: true,
+        displayName: true,
+        country: true,
+        photoUrl: true,
+      },
+    });
+  }
+
+
+  // 3. Get a user's friends from a specific country
+  async getFriendsFromCountry(userId: string, country: string) {
+    const friends = await this.prisma.friend.findMany({
+      where: {
+        OR: [
+          { user_id: userId },
+          { friend_id: userId },
+        ],
+      },
+      include: {
+        users_friend_user_idTousers: {
+          select: {
+            user_id: true,
+            displayName: true,
+            photoUrl: true,
+            country: true,
+          },
+        },
+        users_friend_friend_idTousers: {
+          select: {
+            user_id: true,
+            displayName: true,
+            photoUrl: true,
+            country: true,
+          },
+        },
+      },
     });
 
-    return { country: countryCode, totalUsers };
+    const seen = new Set();
+    const filteredFriends = [];
+
+    for (const friend of friends) {
+      const isInitiator = friend.user_id === userId;
+      const otherUser = isInitiator
+        ? friend.users_friend_friend_idTousers
+        : friend.users_friend_user_idTousers;
+
+      if (!seen.has(otherUser.user_id) && otherUser.country?.toLowerCase() === country.toLowerCase()) {
+        seen.add(otherUser.user_id);
+        filteredFriends.push({
+          user_id: otherUser.user_id,
+          displayName: otherUser.displayName,
+          country: otherUser.country,
+          photoUrl: otherUser.photoUrl,
+        });
+      }
+    }
+
+    return filteredFriends;
   }
 }

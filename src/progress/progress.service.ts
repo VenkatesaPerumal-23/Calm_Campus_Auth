@@ -7,11 +7,9 @@ export class ProgressService {
 
   // Define target values for progress metrics
   private TARGETS = {
-    newConnections: 30,
+    newConnections: 15,
     articlesRead: 15,
-    messagesSent: 500,
-    hoursSlept: 0,  // Optional user input
-    booksRead: 0     // Optional user input
+    messagesSent: 200,
   };
 
   // Normalize metric values to a 0-100 scale
@@ -20,9 +18,9 @@ export class ProgressService {
   }
 
   // Get user progress with calculated scores
-  async getProgress(userId: number) {
+  async getProgress(userId: string) {
     const progress = await this.prisma.progress.findFirst({
-      where: { userId },
+      where: { user_id:userId },
     });
 
     if (!progress) {
@@ -31,11 +29,9 @@ export class ProgressService {
 
     // Normalize scores
     const scores = {
-      newConnections: this.calculateScore(progress.newConnections, this.TARGETS.newConnections),
-      articlesRead: this.calculateScore(progress.articlesRead, this.TARGETS.articlesRead),
-      messagesSent: this.calculateScore(progress.messagesSent, this.TARGETS.messagesSent),
-      hoursSlept: progress.hoursSlept !== null ? this.calculateScore(progress.hoursSlept, this.TARGETS.hoursSlept) : null,
-      booksRead: progress.booksRead !== null ? this.calculateScore(progress.booksRead, this.TARGETS.booksRead) : null
+      newConnections: this.calculateScore(progress.new_connections, this.TARGETS.newConnections),
+      articlesRead: this.calculateScore(progress.articles_read, this.TARGETS.articlesRead),
+      messagesSent: this.calculateScore(progress.messages_sent, this.TARGETS.messagesSent)
     };
 
     // Overall progress: Average of available metrics
@@ -47,44 +43,46 @@ export class ProgressService {
 
   // Update progress
   async updateProgress(
-    userId: number,
+    userId: string,
     data: Partial<{ newConnections: number; articlesRead: number; messagesSent: number; hoursSlept?: number; booksRead?: number }>
   ) {
     try {
       // Get existing progress data
-      const existingProgress = await this.prisma.progress.findUnique({
-        where: { id:userId },
+      let existingProgress = await this.prisma.progress.findFirst({
+        where: { user_id:userId },
       });
   
-      if (!existingProgress) {
-        throw new Error('Progress record not found for this user.');
-      }
+    if (!existingProgress) {
+      existingProgress = await this.prisma.progress.create({
+        data: {
+          user_id: userId,
+          new_connections: 0,
+          articles_read: 0,
+          messages_sent: 0,
+          hours_slept: 0,
+          books_read: 0,
+        },
+      });
+    }
   
       // Prepare update object (increment values if provided)
       const updateData: any = {};
       if (data.newConnections !== undefined) {
-        updateData.newConnections = { increment: Number(data.newConnections) };
+        updateData.new_connections = { increment: Number(data.newConnections) };
       }
       if (data.articlesRead !== undefined) {
-        updateData.articlesRead = { increment: Number(data.articlesRead) };
+        updateData.articles_read = { increment: Number(data.articlesRead) };
       }
       if (data.messagesSent !== undefined) {
-        updateData.messagesSent = { increment: Number(data.messagesSent) };
+        updateData.messages_sent = { increment: Number(data.messagesSent) };
       }
-      if (data.hoursSlept !== undefined) {
-        updateData.hoursSlept = { increment: Number(data.hoursSlept) };
-      }
-      if (data.booksRead !== undefined) {
-        updateData.booksRead = { increment: Number(data.booksRead) };
-      }
-  
       // Update progress in database
       return this.prisma.progress.update({
-        where: { id:userId },
+        where: { user_id:userId },
         data: updateData,
       });
     } catch (error) {
       throw new Error('Update failed: ' + error.message);
     }  
-}
+  }
 }

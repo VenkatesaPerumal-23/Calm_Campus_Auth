@@ -14,6 +14,7 @@ import { MapsModule } from './map/map.module';
 import { FriendRequestsModule } from './friendRequest/friendRequest.module';
 import { StreaksModule } from './streaks/streaks.module';
 import { ContactsModule } from './contacts/contacts.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ContactsModule } from './contacts/contacts.module';
     ContactsModule,
     StreaksModule,
     PrismaModule,
+    ChatModule,
     ConfigModule.forRoot({ isGlobal: true }),
     JwtModule.register({
       secret: process.env.JWT_SECRET, 

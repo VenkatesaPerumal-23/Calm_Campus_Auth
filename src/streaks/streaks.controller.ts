@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Body, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Req, Query, UseGuards } from '@nestjs/common';
 import { StreaksService } from './streaks.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
@@ -7,21 +7,18 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 export class StreaksController {
   constructor(private readonly streaksService: StreaksService) {}
 
-  // Get user's streak details
   @Get()
-  async getStreak(@Query('userId') userId: number) {
-    return this.streaksService.getStreak(Number(userId));
+  async getStreak(@Query('userId') userId: string) {
+    return this.streaksService.getStreak(userId);
   }
 
-  // Mark daily activity (increments streak if eligible)
   @Post('track')
-  async trackStreak(@Body() body: { userId: number }) {
-    return this.streaksService.trackStreak(body.userId);
+  async trackStreak(@Req() req) {
+    return this.streaksService.trackStreak(req.user.user_id);
   }
 
-  // Restore streak using coins
-  @Patch('restore')
-  async restoreStreak(@Body() body: { userId: number, coinsUsed: number }) {
-    return this.streaksService.restoreStreak(body.userId, body.coinsUsed);
-  }
+  // @Patch('restore')
+  // async restoreStreak(@Body() body: { userId: string, coinsUsed: number }) {
+  //   return this.streaksService.restoreStreak(body.userId, body.coinsUsed);
+  // }
 }

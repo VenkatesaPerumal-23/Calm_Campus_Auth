@@ -13,10 +13,6 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
-
-  // ✅ Start ngrok tunnel after app starts
-  const url = await connect({ addr: port, authtoken: process.env.NGROK_AUTHTOKEN });
-  console.log(`🚀 Ngrok tunnel started at: ${url.url()}`);
 }
 
 bootstrap();

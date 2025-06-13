@@ -185,7 +185,6 @@ export class FriendRequestsService {
 
     return uniqueFriends;
   }
-
 }
 
 

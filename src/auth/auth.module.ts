@@ -17,7 +17,7 @@ const serviceAccount = JSON.parse(
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-  projectId: serviceAccount.project_id,
+  //projectId: serviceAccount.project_id,
 });
 
 console.log('Firebase Admin Initialized:', admin.apps.length > 0);

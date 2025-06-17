@@ -47,5 +47,11 @@ export class FriendRequestsController {
     }
     return this.friendRequestsService.getFriendsList(userId);
   }
+
+  @Get('sent')
+  async getSentFriendRequests(@Req() req: Request) {
+    const user = req.user as { userId: string };
+    return this.friendRequestsService.getSentRequests(user.userId);
+  }
 }
 

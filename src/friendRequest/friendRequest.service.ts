@@ -185,6 +185,24 @@ export class FriendRequestsService {
 
     return uniqueFriends;
   }
+
+  // Get all sent friend requests by a user
+  async getSentRequests(userId: string) {
+  return this.prisma.friendrequest.findMany({
+    where: {
+      sender_id: userId,
+    },
+    include: {
+      users_friendrequest_receiver_idTousers: {
+        select: {
+          user_id: true,
+          displayName: true,
+          photoUrl: true,
+        },
+      },
+    },
+  });
+  }
 }
 
 

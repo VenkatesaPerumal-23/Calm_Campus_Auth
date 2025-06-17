@@ -41,6 +41,9 @@ export class MapsService {
 
   // 3. Get a user's friends from a specific country
   async getFriendsFromCountry(userId: string, country: string) {
+    const targetCountry = country.trim().toLowerCase();
+
+    // Step 1: Get all friend relationships for the user
     const friends = await this.prisma.friend.findMany({
       where: {
         OR: [
@@ -73,11 +76,15 @@ export class MapsService {
 
     for (const friend of friends) {
       const isInitiator = friend.user_id === userId;
-      const otherUser = isInitiator
-        ? friend.users_friend_friend_idTousers
-        : friend.users_friend_user_idTousers;
 
-      if (!seen.has(otherUser.user_id) && otherUser.country?.toLowerCase() === country.toLowerCase()) {
+      const otherUser = isInitiator ? friend.users_friend_friend_idTousers : friend.users_friend_user_idTousers;
+
+      if (
+        otherUser &&
+        otherUser.country &&
+        otherUser.country.trim().toLowerCase() === targetCountry &&
+        !seen.has(otherUser.user_id)
+      ) {
         seen.add(otherUser.user_id);
         filteredFriends.push({
           user_id: otherUser.user_id,
@@ -87,6 +94,8 @@ export class MapsService {
         });
       }
     }
+
+    console.log('Filtered Friends from country:', filteredFriends);
 
     return filteredFriends;
   }
